@@ -16,7 +16,6 @@ def play_blackjack():
             break
 
         computer_dealer = []
-
         user_cards = []
 
         for i in range(2):
