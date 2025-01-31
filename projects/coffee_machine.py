@@ -24,6 +24,8 @@ MENU = {
     }
 }
 
+# Coffee Machine Resources
+
 resources = {
     "water": 300,
     "milk": 200,
@@ -31,10 +33,12 @@ resources = {
 }
 
 # Create Monetary Values
-penny = 0.01
-nickel = 0.05
-dime = 0.10
-quarter = 0.25
+coins = {
+    'penny': 0.01,
+    'nickel': 0.05,
+    'dime': 0.10,
+    'quarter': 0.25,
+}
 
 # Total Money
 money = 0
@@ -46,10 +50,11 @@ def report():
     print(f"coffee: {resources['coffee']}g")
     print(f"Money: ${money}")
 
+
 # Do the Calculations
 
 def calculations(choice, item):
-    global money
+    money = money
     total_input = 0
     item_cost = item['cost']
 
@@ -60,7 +65,7 @@ def calculations(choice, item):
         how_many_nickels = int(input("How many nickels: "))
         how_many_pennies = int(input("How many pennies: "))
 
-        total_input += (how_many_dimes * dime) + (how_many_pennies * penny) +  (how_many_quarters * quarter) + (how_many_nickels * nickel)
+        total_input += (how_many_dimes * coins['dime']) + (how_many_pennies * coins['penny']) +  (how_many_quarters * coins['quarter']) + (how_many_nickels * coins['nickel'])
 
         if total_input < item_cost:
             how_much_required = item_cost - total_input
@@ -69,6 +74,7 @@ def calculations(choice, item):
             break
         elif total_input > item_cost:
             too_much = round(total_input - item_cost, 2)
+            total_input -= too_much
             print(f"Here is your change ${too_much}")
             money += item_cost
             print(f"Here is your {choice}! Enjoy!")
@@ -84,6 +90,7 @@ def calculations(choice, item):
             resources['milk'] -= item['ingredients']['milk']
 
 
+# Check the resources if they are enough to make the product!
 
 def item_check(choice, item):
     if 'water' in item['ingredients'] and resources['water'] < item['ingredients']['water']:
@@ -115,7 +122,7 @@ while machine_is_on:
         item_check(choice, MENU[choice])
 
 
-        
+
 '''
     if choice == "espresso":
         if resources['water'] < MENU['espresso']['ingredients']['water']:
