@@ -1,7 +1,9 @@
 # I want to create a running tracker application since I want to improve my one mile run time but want to add more features!
 # The application can record time and distance  
 # Along with the ability to delete, edit, add, etc.... 
+# This application just doesnt have to calculate one mile but multiple forms of run. 
 import matplotlib.pyplot as plt
+import json
 
 running_time = {}
 run_counter = 1
@@ -49,6 +51,7 @@ def delete_time():
             print(f"Day {delete_day} is removed from the log!")
         else:
             print(f"{delete_day} does not exist!")
+            save_data() 
     else:
         print("No running history!")
 
@@ -74,11 +77,31 @@ def edit_time():
     else:
         print("No running history!")
 
+# Save data the user has input
+
+def save_data():
+    with open("running_data.json", "w") as f:
+        json.dump(running_time, f)
+
+
+# Load the data user has stored.
+
+def load_data():
+    global running_time, run_counter
+    try:
+        with open("running_data.json", "r") as f:
+            data = json.load(f)
+        running_time = {int(k): v for k, v in data.items()}
+        run_counter = max(running_time.keys()) + 1 if running_time else 1
+    except FileNotFoundError:
+        running_time = {}
+        run_counter = 1
+
 
 run = True
 
 while run:
-    question = input("What would you like to do today? Type 'add', 'check', 'edit', 'report', 'delete', 'off': ").lower()
+    question = input("What would you like to do today? Type 'add', 'check', 'save', 'load', 'edit', 'report', 'delete', 'off': ").lower()
 
     if question == 'add':
         add_time()
@@ -90,6 +113,10 @@ while run:
          report()
     elif question == 'edit':
         edit_time()
+    elif question == 'save':
+        save_data()
+    elif question == 'load':
+        load_data()
     elif question == 'off':
         run = False
     else:
