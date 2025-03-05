@@ -1,5 +1,5 @@
 import random
-import word_list
+import projects.hangman.word_list as word_list
 
 stages = [r'''
   +---+

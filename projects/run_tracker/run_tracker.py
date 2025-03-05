@@ -1,3 +1,5 @@
+import json
+
 class RunTracker:
     def __init__(self):
         self.running_time = {}
@@ -88,6 +90,26 @@ class RunTracker:
         else:
             print("No running history!")
 
+    # Save data the user has input
+
+    def save_data(self):
+        with open("running_data.json", "w") as f:
+            json.dump(self.running_time, f)
+
+
+    # Load the data user has stored.
+
+    def load_data(self):
+        try:
+            with open("running_data.json", "r") as f:
+                data = json.load(f)
+            self.running_time = {int(k): v for k, v in data.items()}
+            self.run_counter = max(self.running_time.keys()) + 1 if self.running_time else 1
+        except FileNotFoundError:
+            self.running_time = {}
+            self.run_counter = 1
+
+
 # Main program loop
 tracker = RunTracker()
 run = True
@@ -101,10 +123,15 @@ while run:
         tracker.check_latest_time()
     elif question == 'delete':
         tracker.delete_time()
+        tracker.save_data() 
     elif question == 'report':
         tracker.report()
     elif question == 'edit':
         tracker.edit_time()
+    elif question == 'save':
+        tracker.save_data()
+    elif question == 'load':
+        tracker.load_data()
     elif question == 'off':
         run = False
     else:
